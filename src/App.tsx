@@ -1,17 +1,13 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-import {
-  BrowerRouter,
-  Switch,
-  Route,
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./routes/Login";
 import Home from "./routes/Home";
 import Profile from "./routes/Profile";
 import CreateAccout from "./routes/CreateAccout";
 import Layout from "./components/Layout";
+import { useEffect, useState } from "react";
+import LoadingScreen from "./components/LoadingScreen";
 
 const GlobalStyles = createGlobalStyle`
 ${reset};
@@ -51,10 +47,18 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  const [isLoading, setLoading] = useState(true);
+  const init = () => {
+    //wait for firebase
+    setTimeout(() => setLoading(false), 2000);
+  };
+  useEffect(() => {
+    init();
+  }, []);
   return (
     <>
       <GlobalStyles />
-      <RouterProvider router={router} />
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}
     </>
   );
 }
