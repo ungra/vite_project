@@ -1,44 +1,16 @@
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
 import { auth } from "../firebase";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-
-const Wrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 420px;
-  padding: 50px 0px;
-`;
-const Title = styled.h1`
-  font-size: 42px;
-`;
-const Form = styled.form`
-  margin-top: 50px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-`;
-const Input = styled.input`
-  padding: 10px 20px;
-  border-radius: 50px;
-  border: none;
-  width: 100%;
-  font-size: 16px;
-  &[type="submit"] {
-    cursor: pointer;
-    &:hover {
-      opacity: 0.8;
-    }
-  }
-`;
-const Error = styled.span`
-  font-weight: 600;
-  color: tomato;
-`;
+import { useNavigate, Link } from "react-router-dom";
+import { FirebaseError } from "firebase/app";
+import {
+  Form,
+  Error,
+  Input,
+  Switcher,
+  Title,
+  Wrapper,
+} from "../components/auth-components";
 
 export default function CreateAccout() {
   const [isLoading, setLoading] = useState(false);
@@ -63,6 +35,8 @@ export default function CreateAccout() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isLoading || name === "" || email === "" || password === "") return;
+    setError("");
     try {
       //create an account
       //set the name of the user.
@@ -80,6 +54,9 @@ export default function CreateAccout() {
       navigate("/");
     } catch (e) {
       //setError
+      if (e instanceof FirebaseError) {
+        setError(e.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -118,6 +95,9 @@ export default function CreateAccout() {
         ></Input>
       </Form>
       {error !== "" ? <Error>{error}</Error> : null}
+      <Switcher>
+        Already have an account? <Link to="/login">Log in &rarr;</Link>
+      </Switcher>
     </Wrapper>
   );
 }
