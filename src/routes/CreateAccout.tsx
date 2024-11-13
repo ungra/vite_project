@@ -1,5 +1,9 @@
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { useState } from "react";
+import { auth } from "../firebase";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
 const Wrapper = styled.div`
   height: 100%;
   display: flex;
@@ -37,11 +41,12 @@ const Error = styled.span`
 `;
 
 export default function CreateAccout() {
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -56,12 +61,23 @@ export default function CreateAccout() {
     }
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       //create an account
       //set the name of the user.
       //redirect to the home page.
+      setLoading(true);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      console.log(userCredential.user);
+      await updateProfile(userCredential.user, {
+        displayName: name,
+      });
+      navigate("/");
     } catch (e) {
       //setError
     } finally {
@@ -70,7 +86,7 @@ export default function CreateAccout() {
   };
   return (
     <Wrapper>
-      <Title> Log into 𝕏</Title>
+      <Title> Create a 𝕏 account </Title>
       <Form onSubmit={onSubmit}>
         <Input
           name="name"
