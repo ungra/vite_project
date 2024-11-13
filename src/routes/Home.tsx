@@ -1,4 +1,3 @@
-import { auth } from "../firebase";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -11,13 +10,9 @@ const Wrapper = styled.div`
 `;
 
 export default function Home() {
-  const logOut = () => {
-    auth.signOut();
-  };
   return (
     <Wrapper>
       <h1>Home</h1>
-      <button onClick={logOut}>Log out</button>
     </Wrapper>
   );
 }
