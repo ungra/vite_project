@@ -2,7 +2,7 @@ import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { useState } from "react";
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Form = styled.form`
   display: flex;
@@ -80,14 +80,14 @@ export default function PostTweetForm() {
         username: user?.displayName || "Anonymous",
         userId: user?.uid,
       });
-      if (file) {
-        const locationRef = ref(storage, `tweets/${user?.uid}/${doc.id}`);
-        const result = await uploadBytes(locationRef, file);
-        const url = await getDownloadURL(result.ref);
-        updateDoc(doc, {
-          photo: url,
-        });
-      }
+      // if (file) {
+      //   const locationRef = ref(storage, `tweets/${user?.uid}/${doc.id}`);
+      //   const result = await uploadBytes(locationRef, file);
+      //   const url = await getDownloadURL(result.ref);
+      //   updateDoc(doc, {
+      //     photo: url,
+      //   });
+      // }
       setTweet("");
       setFile(null);
     } catch (e) {
