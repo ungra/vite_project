@@ -1,7 +1,7 @@
-import { addDoc, collection, updateDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
 import styled from "styled-components";
-import { auth, db, storage } from "../firebase";
+import { auth, db } from "../firebase";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const Form = styled.form`
@@ -74,7 +74,7 @@ export default function PostTweetForm() {
     if (isLoading || tweet === "" || tweet.length > 180) return;
     try {
       setLoading(true);
-      const doc = await addDoc(collection(db, "tweet"), {
+      await addDoc(collection(db, "tweet"), {
         tweet,
         createAt: Date.now(),
         username: user?.displayName || "Anonymous",

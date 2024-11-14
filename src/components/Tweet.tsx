@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { ITweet } from "./Timeline";
-import { auth, db, storage } from "../firebase";
+import { auth, db } from "../firebase";
 import { deleteDoc, doc } from "firebase/firestore";
-import { ref } from "firebase/storage";
 
 const Wrapper = styled.div`
   display: grid;
