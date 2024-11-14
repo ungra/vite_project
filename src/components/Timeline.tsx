@@ -31,13 +31,13 @@ export default function Timeline() {
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
-    const fetchTweets = async () => {
+    const fetchTweets = () => {
       const tweetsQuery = query(
         collection(db, "tweet"),
         orderBy("createAt", "desc"),
         limit(25)
       );
-      unsubscribe = await onSnapshot(tweetsQuery, (snapshot) => {
+      unsubscribe = onSnapshot(tweetsQuery, (snapshot) => {
         const tweets = snapshot.docs.map((doc) => {
           const { tweet, createAt, userId, username, photo } = doc.data();
           return {
@@ -54,9 +54,7 @@ export default function Timeline() {
     };
     fetchTweets();
     return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
+      unsubscribe?.();
     };
   }, []);
   return (
